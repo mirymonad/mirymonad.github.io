@@ -40,6 +40,14 @@ class Tensor {
      */
      _data;
 
+    get min() {
+        return Math.min(...this._data);
+    }
+
+    get max() {
+        return Math.max(...this._data);
+    }
+
     /**
      * Initialises a new tensor instance.
      * 
@@ -292,6 +300,35 @@ class NumTensor extends Tensor {
         }
 
         return array;
+    }
+
+    /**
+     * Performs elementwise division.
+     * 
+     * For example, given the tensor:
+     * 
+     * ```
+     * let A = [1, 2, 3]
+     * ```
+     * 
+     * Then `A.div(2)` would perform:
+     * 
+     * ```
+     * C = [1/2, 2/2, 3/2]
+     * C = [0.5, 1, 1.5]
+     * ```
+     * 
+     * @param {number} scalar the number to divide elementwise.
+     * @returns the tensor division.
+     */
+    div(scalar) {
+        let result = new NumTensor([...this.shape]);
+
+        for (let i = 0; i < result._data.length; i++) {
+            result._data[i] = this._data[i] / scalar;
+        }
+
+        return result;
     }
 
     /**

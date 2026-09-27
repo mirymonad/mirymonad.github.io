@@ -45,6 +45,6 @@ export class MSE extends ReverseLossFunction {
     backwards() {
         const n = this.predictedCache.shape[0];
 
-        return this.predictedCache.sub(this.expectedCache).s_mul(2 / n);
+        return this.predictedCache.sub(this.expectedCache).mul(2 / n);
     }
 }

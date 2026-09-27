@@ -53,7 +53,7 @@ export class ReLU extends ReverseFunction {
         const result = new NumTensor(this.forwardsCache.shape);
 
         for (let i = 0; i < result._data.length; i++) {
-            result._data[i] = this.forwardsCache._data[i] > 1 ? 1 : 0;
+            result._data[i] = this.forwardsCache._data[i] > 0 ? 1 : 0;
         }
 
         return result.hadamard(super.backwards());

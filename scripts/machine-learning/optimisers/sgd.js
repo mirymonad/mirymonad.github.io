@@ -1,4 +1,4 @@
-import { NumTensor } from "../tensor";
+import { NumTensor } from "../tensor.js";
 
 export class SGD {
 
@@ -19,6 +19,6 @@ export class SGD {
      * @returns The updated weight tensor of the same shape.
      */
     optimise(weights, gradients) {
-        return weights.sub(gradients.s_mul(this.lr));
+        return weights.sub(gradients.mul(this.lr));
     }
 }

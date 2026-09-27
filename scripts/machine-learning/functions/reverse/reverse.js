@@ -69,12 +69,19 @@ class ReverseFunction {
 
 class WeightedReverseFunction extends ReverseFunction {
 
+    /**
+     * The perceptron weights
+     * 
+     * @type {NumTensor}
+     */ 
+    #weights;
+
     get weights() {
-        throw new Error("weights getter must be implemented by subclass");
+        return this.#weights;
     }
 
     set weights(weights) {
-        throw new Error("weights setter must be implemented by subclass");
+        this.#weights = weights;
     }
 
     /**
@@ -86,6 +93,16 @@ class WeightedReverseFunction extends ReverseFunction {
 
     get backwardsCache() {
         return this.#backwardsCache;
+    }
+
+    constructor(inFeatures, outFeatures) {
+        super();
+
+        this.inFeatures = inFeatures;
+        this.outFeatures = outFeatures;
+
+        // The neurons are the rows, the inputs are the columns
+        this.#weights = new NumTensor([outFeatures, inFeatures]);
     }
 
     /**
@@ -114,6 +131,23 @@ class WeightedReverseFunction extends ReverseFunction {
      */
     cacheBackwards(gradient) {
         throw new Error("cacheBackwards() must be implemented by subclass");
+    }
+
+    /**
+     * He weight initialisation.
+     * 
+     */
+    he() {
+        for (let i = 0; i < this.#weights._data.length; i++) {
+            const u1 = Math.random();
+            const u2 = Math.random();
+
+            const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+
+            this.#weights._data[i] = z * Math.sqrt(2 / this.inFeatures);
+        }
+
+        console.log(this.#weights);
     }
 }
 

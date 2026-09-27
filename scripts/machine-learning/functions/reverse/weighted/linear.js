@@ -6,30 +6,10 @@ import { NumTensor } from "../../../tensor.js";
  */
 export class Linear extends WeightedReverseFunction {
 
-    /**
-     * The perceptron weights
-     * 
-     * @type {NumTensor}
-     */ 
-    #weights;
-
-    get weights() {
-        return this.#weights;
-    }
-
-    set weights(weights) {
-        this.#weights = weights;
-    }
-
     constructor(inFeatures, outFeatures) {
-        super();
-
-        this.inFeatures = inFeatures;
-        this.outFeatures = outFeatures;
-
-        // The neurons are the rows, the inputs are the columns
-        this.#weights = new NumTensor([outFeatures, inFeatures]);
-        this.#weights._data = this.#weights._data.fill(1);
+        super(inFeatures, outFeatures);
+        
+        this.he();
     }
 
     /**
@@ -41,7 +21,7 @@ export class Linear extends WeightedReverseFunction {
      * @returns the unactivated output vector (z).
      */
     forwards(tensor) {
-        return super.forwards(this.#weights.t_mul(tensor));
+        return super.forwards(this.weights.t_mul(tensor));
     }
     
     /**
@@ -73,7 +53,7 @@ export class Linear extends WeightedReverseFunction {
      * @returns A vector of the same size as the inputs containing their gradients.
      */
     backwards() {
-        return this.#weights.permute(1, 0).t_mul(super.backwards());
+        return this.weights.permute(1, 0).t_mul(super.backwards());
     }
 
     /**
@@ -108,7 +88,7 @@ export class Linear extends WeightedReverseFunction {
      * 
      * @returns A tensor with the same shape as the weights containing their gradients.
      */
-    cacheBackwards() {
-        return super.backwards().outer(this.forwardsCache);
+    cacheBackwards(gradient) {
+        return gradient.outer(this.forwardsCache);
     }
 }
